@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "206774759941",
+    "project_id": "studentsphere-e9800",
+    "storage_bucket": "studentsphere-e9800.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206774759941:android:8d04e85d53b6836330a26c",
+        "android_client_info": {
+          "package_name": "com.example.studentsphere"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDT7DeJo0U4KfmnqaAyHTUDGU1X2ZbDd8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
