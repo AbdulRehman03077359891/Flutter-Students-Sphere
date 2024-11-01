@@ -2,7 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studentsphere/Controllers/student_dashboard_controller.dart';
-import 'package:studentsphere/Screens/Student/chat_gpt_screen.dart';
+import 'package:studentsphere/Controllers/user_notification_services.dart';
+import 'package:studentsphere/Screens/Student/chatbot_screen.dart';
 import 'package:studentsphere/Screens/Student/student_posts_categery.dart';
 import 'package:studentsphere/Widgets/user_drawer_widget.dart';
 import 'package:studentsphere/Widgets/user_horizontal_card.dart';
@@ -26,12 +27,23 @@ class StudentScreen extends StatefulWidget {
 class _StudentScreenState extends State<StudentScreen> {
   final StudentDashboardController studentDashboardController =
       Get.put(StudentDashboardController());
+  UserNotificationServices userNotificationServices = UserNotificationServices();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       studentDashboardController.getDashBoardData();
+      userNotificationServices.requestNotificationPermissions(context);
+      userNotificationServices.firebaseInit(context);
+      userNotificationServices.setupInteractMessage(context);
+      userNotificationServices.getDeviceToken().then((token) {
+        if (token.isNotEmpty) {
+      userNotificationServices.storeUserFCMToken(widget.userUid, token);
+    }
+    // Start listening for new requests and trigger notifications
+    userNotificationServices.listenForNewRequests(widget.userUid);
+      });
     });
   }
 
@@ -205,7 +217,7 @@ class _StudentScreenState extends State<StudentScreen> {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.to(() => ChatGPTScreen(userUid: widget.userUid, userName: widget.userName, userEmail: widget.userEmail));
+          Get.to(() => ChatScreen());
         },
         child: const Icon(Icons.chat),
       ),

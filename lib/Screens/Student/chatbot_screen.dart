@@ -1,90 +1,85 @@
-// import 'package:flutter/material.dart';
-// import 'package:studentsphere/Controllers/chatbot_controller.dart';
+// ignore_for_file: invalid_use_of_protected_member
 
-// class ChatBotScreen extends StatefulWidget {
-//   const ChatBotScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:studentsphere/Controllers/chatbot_ai_controller.dart';
 
-//   @override
-//   State<ChatBotScreen> createState() => _ChatBotScreenState();
-// }
+class ChatScreen extends StatelessWidget {
+  final AIChatController chatController = Get.put(AIChatController());
+  final TextEditingController _messageController = TextEditingController();
 
-// class _ChatBotScreenState extends State<ChatBotScreen> {
-//   final ChatBotController _chatBotController = ChatBotController();
-//   final TextEditingController _messageController = TextEditingController();
-//   final List<Map<String, String>> _messages = [];
+  ChatScreen({super.key});
 
-//   void _sendMessage() async {
-//     if (_messageController.text.isEmpty) return;
-
-//     String userMessage = _messageController.text;
-//     setState(() {
-//       _messages.add({'user': userMessage});
-//     });
-
-//     _messageController.clear();
-
-//     String response = await _chatBotController.sendMessage(userMessage);
-
-//     setState(() {
-//       _messages.add({'bot': response});
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Chatbot')),
-//       body: Column(
-//         children: [
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: _messages.length,
-//               itemBuilder: (context, index) {
-//                 final message = _messages[index];
-//                 bool isUser = message.containsKey('user');
-//                 return Align(
-//                   alignment:
-//                       isUser ? Alignment.centerRight : Alignment.centerLeft,
-//                   child: Container(
-//                     margin:
-//                         const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-//                     padding: const EdgeInsets.all(10),
-//                     decoration: BoxDecoration(
-//                       color: isUser ? Colors.blue : Colors.grey[300],
-//                       borderRadius: BorderRadius.circular(8),
-//                     ),
-//                     child: Text(
-//                       isUser ? message['user']! : message['bot']!,
-//                       style: TextStyle(
-//                           color: isUser ? Colors.white : Colors.black),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Row(
-//               children: [
-//                 Expanded(
-//                   child: TextField(
-//                     controller: _messageController,
-//                     decoration: const InputDecoration(
-//                       hintText: 'Type a message...',
-//                       border: OutlineInputBorder(),
-//                     ),
-//                   ),
-//                 ),
-//                 IconButton(
-//                   icon: const Icon(Icons.send),
-//                   onPressed: _sendMessage,
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new),
+            ),
+        title: const Text("Chatbot", style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  shadows: [BoxShadow(blurRadius: 5, spreadRadius: 10)],
+                ),),
+        centerTitle: true,
+        foregroundColor: const Color.fromARGB(255, 18, 40, 136),
+        backgroundColor: const Color.fromARGB(255, 182, 237, 255)
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Obx(() {
+              // Use Obx to make the Chat widget reactive
+              return Chat(
+                messages: chatController.messages.value, // Access the reactive list properly
+                onSendPressed: (types.PartialText message) {
+                  chatController.sendMessage(message.text);
+                  _messageController.clear();
+                },
+                user: const types.User(id: 'user-id'),
+                theme: const DefaultChatTheme(
+                  backgroundColor: Color.fromARGB(255, 182, 237, 255),
+                  inputBackgroundColor: Color.fromARGB(31, 18, 40, 136),
+                  primaryColor: Color.fromARGB(255, 18, 40, 136),
+                  inputTextColor: Color.fromARGB(255, 18, 40, 136),
+                ),
+              );
+            }),
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: TextField(
+          //           controller: _messageController,
+          //           decoration: InputDecoration(
+          //             hintText: 'Type a message...',
+          //             border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(20),
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //       IconButton(
+          //         icon: const Icon(Icons.send, color: Color.fromARGB(255, 18, 40, 136)),
+          //         onPressed: () {
+          //           if (_messageController.text.isNotEmpty) {
+          //             chatController.sendMessage(_messageController.text);
+          //             _messageController.clear(); // Clear the input after sending
+          //           }
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          // ),
+        ],
+      ),
+    );
+  }
+}

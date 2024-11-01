@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:studentsphere/Controllers/admin_dashboard_controller.dart';
+import 'package:studentsphere/Controllers/admin_notfication_sevices.dart';
 import 'package:studentsphere/Screens/Admin/admin_posts_categorized.dart';
 import 'package:studentsphere/Widgets/admin_drawer_widget.dart';
 
@@ -20,13 +21,23 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   final AdminDashboardController adminDashboardController =
       Get.put(AdminDashboardController());
+  NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       adminDashboardController.getDashBoardData();
-      
+      notificationServices.requestNotificationPermissions(context);
+      notificationServices.firebaseInit(context);
+      notificationServices.setupInteractMessage(context);
+      notificationServices.getDeviceToken().then((token) {
+        if (token.isNotEmpty) {
+      notificationServices.storeAdminFCMToken(widget.userUid, token);
+    }
+    // Start listening for new requests and trigger notifications
+    notificationServices.listenForNewRequests(widget.userUid);
+      });
     });
   }
 
