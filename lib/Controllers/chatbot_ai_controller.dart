@@ -1185,7 +1185,7 @@ bool _checkForExactPhraseMatch(String userMessage, String response) {
     {
       "exact_phrases": ["who made you", "who created you", "who developed you"],
       "response":
-          "I was created by AbdulRehman Arain, a skilled Flutter developer with a passion for building smart, helpful tools."
+          "I was created by Sanober Noohani, a skilled Flutter developer with a passion for building smart, helpful tools."
     },
     {
       "exact_phrases": ["why do you exist", "what is your purpose"],

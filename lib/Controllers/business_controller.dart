@@ -84,7 +84,7 @@ class BusinessController extends GetxController {
     } else if (dropDownValue == "") {
       notify("error", "Please Enter Category");
     } else if (date.isEmpty) {
-      notify("error", "Please Enter Price");
+      notify("error", "Please Enter Date");
     } else {
       imageStoreStorage(postName, date, link, discription, userUid, userName, userEmail, profilePicture );
     }

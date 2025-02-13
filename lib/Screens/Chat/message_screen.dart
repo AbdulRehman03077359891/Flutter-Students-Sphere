@@ -10,11 +10,9 @@ class MessagesScreen extends StatefulWidget {
   final String recieverId,
       recieverName,
       recieverEmail,
-      
       senderId,
       senderName,
       senderEmail,
-      
       lastMessage,
       conversationId;
   final Timestamp createdAt, lastMessageAt;
@@ -32,7 +30,7 @@ class MessagesScreen extends StatefulWidget {
     required this.senderPic,
     required this.lastMessage,
     required this.createdAt,
-    required this.lastMessageAt, 
+    required this.lastMessageAt,
     this.status = false,
   });
 
@@ -43,7 +41,8 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   var chatController = Get.put(ChatController());
   late var messageStream;
-  final String placeHolder = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fprofile-image&psig=AOvVaw1UcT-iiXXJ-9vm_WQE_8fM&ust=1729410454040000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLCPppL6mYkDFQAAAAAdAAAAABAE";
+  final String placeHolder =
+      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fprofile-image&psig=AOvVaw1UcT-iiXXJ-9vm_WQE_8fM&ust=1729410454040000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCLCPppL6mYkDFQAAAAAdAAAAABAE";
 
   // Display the time difference
   late String timeAgo;
@@ -61,7 +60,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
     // Get the current time
     DateTime now = DateTime.now();
-    
+
     // Convert Firestore Timestamp to DateTime
     DateTime lastMessageTime = widget.lastMessageAt.toDate();
 
@@ -100,21 +99,24 @@ class _MessagesScreenState extends State<MessagesScreen> {
               icon: const Icon(Icons.arrow_back_ios_new),
             ),
             CircleAvatar(
-  backgroundImage: widget.status 
-      ? (widget.senderPic == null 
-          ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for sender
-          : CachedNetworkImageProvider(widget.senderPic!)) as ImageProvider
-      : (widget.recieverPic == null 
-          ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for receiver
-          : CachedNetworkImageProvider(widget.recieverPic!)) as ImageProvider,
-),
-
+              backgroundImage: widget.status
+                  ? (widget.senderPic == null
+                      ? const AssetImage(
+                          'assets/images/profilePlaceHolder.jpg') // Asset image for sender
+                      : CachedNetworkImageProvider(
+                          widget.senderPic!)) as ImageProvider
+                  : (widget.recieverPic == null
+                      ? const AssetImage(
+                          'assets/images/profilePlaceHolder.jpg') // Asset image for receiver
+                      : CachedNetworkImageProvider(
+                          widget.recieverPic!)) as ImageProvider,
+            ),
             const SizedBox(width: 12.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.status? widget.senderName: widget.recieverName,
+                  widget.status ? widget.senderName : widget.recieverName,
                   style: const TextStyle(fontSize: 16),
                 ),
                 Text(
@@ -125,17 +127,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.local_phone),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.videocam),
-            onPressed: () {},
-          ),
-          const SizedBox(width: 16.0),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.local_phone),
+        //     onPressed: () {},
+        //   ),
+        //   IconButton(
+        //     icon: const Icon(Icons.videocam),
+        //     onPressed: () {},
+        //   ),
+        //   const SizedBox(width: 16.0),
+        // ],
       ),
       body: Column(
         children: [
@@ -162,213 +164,279 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (context, index) {
                   final message = snapshot.data!.docs[index].data();
-                  return widget.status?
-                  message["isBusiness"]
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Stack(
+                  return widget.status
+                      ? message["isBusiness"]
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      right: 50, left: 50, top: 15, bottom: 2),
-                                  decoration: const ShapeDecoration(
-                                      color: Color.fromARGB(30, 18, 40, 136),
-                                      shape: BeveledRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color.fromARGB(150, 18, 40, 136)),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                              topLeft: Radius.circular(6)))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 10, left: 7, top: 5, bottom: 5),
-                                    child: Text(
-                                      '${message["message"]}',
-                                      style: const TextStyle(
+                                Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 50,
+                                          left: 50,
+                                          top: 15,
+                                          bottom: 2),
+                                      decoration: const ShapeDecoration(
                                           color:
-                                              Color.fromARGB(255, 12, 12, 12),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
+                                              Color.fromARGB(30, 18, 40, 136),
+                                          shape: BeveledRectangleBorder(
+                                              side: BorderSide(
+                                                  color: Color.fromARGB(
+                                                      150, 18, 40, 136)),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
+                                                  topLeft:
+                                                      Radius.circular(6)))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 10,
+                                            left: 7,
+                                            top: 5,
+                                            bottom: 5),
+                                        child: Text(
+                                          '${message["message"]}',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 12, 12, 12),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: CircleAvatar(
+                                            backgroundImage: widget
+                                                        .recieverPic ==
+                                                    null
+                                                ? const AssetImage(
+                                                    'assets/images/profilePlaceHolder.jpg') // Asset image for sender
+                                                : CachedNetworkImageProvider(
+                                                        widget.recieverPic!)
+                                                    as ImageProvider,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius
+                                                            .circular(25),
+                                                    border: Border.all(
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            150, 18, 40, 136),
+                                                        width: 2)))))
+                                  ],
                                 ),
-                                Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: CircleAvatar(
-                                        backgroundImage:
-                                            widget.recieverPic == null 
-      ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for sender
-      : CachedNetworkImageProvider(widget.recieverPic!) as ImageProvider,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(150, 18, 40, 136),
-                                                    width: 2)))))
                               ],
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      right: 50, left: 50, top: 15, bottom: 2),
-                                  decoration: const ShapeDecoration(
-                                      color: Color.fromARGB(30, 18, 40, 136),
-                                      shape: BeveledRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color.fromARGB(150, 18, 40, 136)),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                              topRight: Radius.circular(6)))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 7, bottom: 5, top: 5),
-                                    child: Text(
-                                      '${message["message"]}',
-                                      style: const TextStyle(
+                                Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 50,
+                                          left: 50,
+                                          top: 15,
+                                          bottom: 2),
+                                      decoration: const ShapeDecoration(
                                           color:
-                                              Color.fromARGB(255, 12, 12, 12),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
+                                              Color.fromARGB(30, 18, 40, 136),
+                                          shape: BeveledRectangleBorder(
+                                              side: BorderSide(
+                                                  color: Color.fromARGB(
+                                                      150, 18, 40, 136)),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
+                                                  topRight:
+                                                      Radius.circular(6)))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 7,
+                                            bottom: 5,
+                                            top: 5),
+                                        child: Text(
+                                          '${message["message"]}',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 12, 12, 12),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        left: 0,
+                                        top: 0,
+                                        child: CircleAvatar(
+                                            backgroundImage: widget.senderPic ==
+                                                    null
+                                                ? const AssetImage(
+                                                    'assets/images/profilePlaceHolder.jpg') // Asset image for sender
+                                                : CachedNetworkImageProvider(
+                                                        widget.senderPic!)
+                                                    as ImageProvider,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                    border: Border.all(
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            150, 18, 40, 136),
+                                                        width: 2)))))
+                                  ],
                                 ),
-                                Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: CircleAvatar(
-                                        backgroundImage:
-                                            widget.senderPic == null 
-      ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for sender
-      : CachedNetworkImageProvider(widget.senderPic!) as ImageProvider,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(150, 18, 40, 136),
-                                                    width: 2)))))
                               ],
-                            ),
-                          
-                          ],
-                        ):message["isBusiness"] == false
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Stack(
+                            )
+                      : message["isBusiness"] == false
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      right: 50, left: 50, top: 15, bottom: 2),
-                                  decoration: const ShapeDecoration(
-                                      color: Color.fromARGB(30, 18, 40, 136),
-                                      shape: BeveledRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color.fromARGB(150, 18, 40, 136)),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                              topLeft: Radius.circular(6)))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        right: 10, left: 7, top: 5, bottom: 5),
-                                    child: Text(
-                                      '${message["message"]}',
-                                      style: const TextStyle(
+                                Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 50,
+                                          left: 50,
+                                          top: 15,
+                                          bottom: 2),
+                                      decoration: const ShapeDecoration(
                                           color:
-                                              Color.fromARGB(255, 12, 12, 12),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
+                                              Color.fromARGB(30, 18, 40, 136),
+                                          shape: BeveledRectangleBorder(
+                                              side: BorderSide(
+                                                  color: Color.fromARGB(
+                                                      150, 18, 40, 136)),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
+                                                  topLeft:
+                                                      Radius.circular(6)))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            right: 10,
+                                            left: 7,
+                                            top: 5,
+                                            bottom: 5),
+                                        child: Text(
+                                          '${message["message"]}',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 12, 12, 12),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: CircleAvatar(
+                                            backgroundImage: widget.senderPic ==
+                                                    null
+                                                ? const AssetImage(
+                                                    'assets/images/profilePlaceHolder.jpg') // Asset image for sender
+                                                : CachedNetworkImageProvider(
+                                                        widget.senderPic!)
+                                                    as ImageProvider,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25),
+                                                    border: Border.all(
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            150, 18, 40, 136),
+                                                        width: 2)))))
+                                  ],
                                 ),
-                                Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: CircleAvatar(
-                                        backgroundImage:
-                                            widget.senderPic == null 
-      ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for sender
-      : CachedNetworkImageProvider(widget.senderPic!) as ImageProvider,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(
-                                                        150, 111, 2, 44),
-                                                    width: 2)))))
                               ],
-                            ),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Stack(
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  margin: const EdgeInsets.only(
-                                      right: 50, left: 50, top: 15, bottom: 2),
-                                  decoration: const ShapeDecoration(
-                                      color: Color.fromARGB(30, 18, 40, 136),
-                                      shape: BeveledRectangleBorder(
-                                          side: BorderSide(
-                                              color: Color.fromARGB(150, 18, 40, 136)),
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                              topRight: Radius.circular(6)))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10, right: 7, bottom: 5, top: 5),
-                                    child: Text(
-                                      '${message["message"]}',
-                                      style: const TextStyle(
+                                Stack(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(
+                                          right: 50,
+                                          left: 50,
+                                          top: 15,
+                                          bottom: 2),
+                                      decoration: const ShapeDecoration(
                                           color:
-                                              Color.fromARGB(255, 12, 12, 12),
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 15),
+                                              Color.fromARGB(30, 18, 40, 136),
+                                          shape: BeveledRectangleBorder(
+                                              side: BorderSide(
+                                                  color: Color.fromARGB(
+                                                      150, 18, 40, 136)),
+                                              borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
+                                                  topRight:
+                                                      Radius.circular(6)))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10,
+                                            right: 7,
+                                            bottom: 5,
+                                            top: 5),
+                                        child: Text(
+                                          '${message["message"]}',
+                                          style: const TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 12, 12, 12),
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 15),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Positioned(
+                                        left: 0,
+                                        top: 0,
+                                        child: CircleAvatar(
+                                            backgroundImage: widget
+                                                        .recieverPic ==
+                                                    null
+                                                ? const AssetImage(
+                                                    'assets/images/profilePlaceHolder.jpg') // Asset image for sender
+                                                : CachedNetworkImageProvider(
+                                                        widget.recieverPic!)
+                                                    as ImageProvider,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius
+                                                            .circular(25),
+                                                    border: Border.all(
+                                                        color: const Color
+                                                            .fromARGB(
+                                                            150, 18, 40, 136),
+                                                        width: 2)))))
+                                  ],
                                 ),
-                                Positioned(
-                                    left: 0,
-                                    top: 0,
-                                    child: CircleAvatar(
-                                        backgroundImage:
-                                            widget.recieverPic == null 
-      ? const AssetImage('assets/images/profilePlaceHolder.jpg') // Asset image for sender
-      : CachedNetworkImageProvider(widget.recieverPic!) as ImageProvider,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(25),
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(
-                                                        150, 111, 2, 44),
-                                                    width: 2)))))
                               ],
-                            ),
-                          
-                          ],
-                        );
-                
+                            );
                 },
               );
             },
@@ -377,7 +445,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Row(
               children: [
-                const Icon(Icons.mic, color: Color.fromARGB(255, 18, 40, 136)),
+                // const Icon(Icons.mic, color: Color.fromARGB(255, 18, 40, 136)),
                 const SizedBox(width: 16.0),
                 Expanded(
                   child: Row(
@@ -408,23 +476,25 @@ class _MessagesScreenState extends State<MessagesScreen> {
                                       }
                                     },
                                   ),
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 16.0 / 2),
-                                    child: Icon(
-                                      Icons.camera_alt_outlined,
-                                    ),
-                                  ),
+                                  // const Padding(
+                                  //   padding: EdgeInsets.symmetric(
+                                  //       horizontal: 16.0 / 2),
+                                  //   child: Icon(
+                                  //     Icons.camera_alt_outlined,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
                             filled: true,
-                            fillColor: const Color(0xFF00BF6D).withOpacity(0.08),
+                            fillColor:
+                                const Color(0xFF00BF6D).withOpacity(0.08),
                             contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 16.0 * 1.5, vertical: 16.0),
                             border: const OutlineInputBorder(
                               borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.all(Radius.circular(50)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(50)),
                             ),
                           ),
                         ),
